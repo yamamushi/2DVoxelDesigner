@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resource/2D_Voxel_Designer_Icon.ico</file>
+        <file>resource/2D_Voxel_Designer_Icon.png</file>
+        <file>resource/2D_Voxel_Designer_LOGO.png</file>
+    </qresource>
+</RCC>
