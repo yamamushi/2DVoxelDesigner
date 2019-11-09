@@ -27,6 +27,9 @@ public:
     void onLoadImage(QString);
     void onClearImage();
     void onUpdateLineColor(QColor);
+    void onResetPoint();
+    void onUndo();
+    void onRedo();
 
     // Set workspace-property
     int getSpacingSize(){ return m_spacingSize / m_spacingUnit; }
@@ -86,6 +89,9 @@ private:
     // Pan Scrolling
     bool            m_panScrollMode;
     int             m_panStartX, m_panStartY;
+
+    QList<QGraphicsItem*>   m_historiesBefore;
+    QList<QGraphicsItem*>   m_historiesAfter;
 };
 
 #endif // GRAPHICSVIEW_H

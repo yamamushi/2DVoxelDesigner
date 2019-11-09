@@ -521,6 +521,48 @@ border:none;
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="btnResetPoint">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+color: rgb(0, 0, 0);
+background-color: rgb(182, 182, 182);
+border:none;
+}
+QPushButton:hover{
+color: rgb(0, 0, 0);
+background-color: rgb(200, 200, 200);
+border:none;
+}
+QPushButton:pressed{
+color: rgb(0, 0, 0);
+background-color: rgb(210, 210, 210);
+border:none;
+}
+QPushButton:disabled {
+color: rgb(96, 96, 96);
+background-color: rgb(200, 200, 200);
+border:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>RESET POINT</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

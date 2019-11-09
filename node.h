@@ -24,10 +24,14 @@ public:
     void    setReactor(bool f);
     bool    isReactor();
     bool    isLinkedNode(Node*);
+    void    resetPosition();
 
+    void    undo();
+    void    redo();
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
     QPoint          m_centralPos;
@@ -39,6 +43,8 @@ private:
     QColor          m_color;
     bool            m_isReactorNode;
 
+    QList<QPoint>   m_historyPositionBefore;
+    QList<QPoint>   m_historyPositionAfter;
 signals:
     void nodeChanged(Node*);
     void nodePressed(Node*);

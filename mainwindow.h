@@ -33,6 +33,10 @@ private slots:
     void onClearImage_triggered();
     void onChooseLineColor_triggered();
     void onReactorGuide_triggered(bool);
+    void onResetPoint_triggered();
+
+protected:
+    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
 private:
     Ui::MainWindow *ui;

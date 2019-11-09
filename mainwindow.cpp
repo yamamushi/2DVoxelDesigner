@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->chkLockImage, SIGNAL(toggled(bool)), m_graphicsView, SLOT(onLockImage(bool)));
     QObject::connect(ui->chkShowImage, SIGNAL(toggled(bool)), m_graphicsView, SLOT(onShowImage(bool)));
     QObject::connect(ui->btnReactorGuide, SIGNAL(toggled(bool)), this, SLOT(onReactorGuide_triggered(bool)));
+    QObject::connect(ui->btnResetPoint, SIGNAL(released()), this, SLOT(onResetPoint_triggered()));
 
     // Draw Reactor-Preview
     QObject::connect(m_graphicsView, SIGNAL(reactorChanged(Node*, Node*, Node*, Node*)), ui->widReactorPreview, SLOT(drawReactorPreview(Node*, Node*, Node*, Node*)));
@@ -194,5 +195,26 @@ void MainWindow::onReactorGuide_triggered(bool f)
 
     ui->widReactorPreview->setSpacingSize(m_graphicsView->getSpacingSize());
     ui->widReactorPreview->setSpacingUnit(m_graphicsView->getSpacingUnit());
+
+}
+
+void MainWindow::onResetPoint_triggered()
+{
+    m_graphicsView->onResetPoint();
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event)
+{
+    if(event->matches(QKeySequence::Undo))
+    {
+        // Ctrl + Z
+        m_graphicsView->onUndo();
+        qDebug() << "Undo";
+    }else if(event->matches(QKeySequence::Redo) || (event->key() == Qt::Key_R && event->modifiers() == Qt::ControlModifier))
+    {
+        // Shift + Ctrl + Z, Ctrl + R
+        m_graphicsView->onRedo();
+        qDebug() << "Redo";
+    }
 
 }

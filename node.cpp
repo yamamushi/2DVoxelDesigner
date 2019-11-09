@@ -20,6 +20,9 @@ Node::Node():
     setRect(-3, - 3, 6, 6);
     setSelectionState(false);
 
+    m_historyPositionBefore.clear();
+    m_historyPositionAfter.clear();
+    m_historyPositionBefore.push_back(QPoint(0,0));
 }
 
 Node::~Node()
@@ -48,6 +51,37 @@ void Node::setLocalPos(QPoint pt){
         m_centralPos = pos().toPoint() / m_spacingUnit;
 
     setPos((pt + m_centralPos) * m_spacingUnit);
+}
+
+void Node::resetPosition(){
+    setLocalPos(QPoint(0,0));
+//    m_historyPositionBefore.clear();
+//    m_historyPositionAfter.clear();
+//    m_historyPositionBefore.push_back(QPoint(0,0));
+
+    m_historyPositionBefore.push_back(QPoint(0,0));
+    m_historyPositionAfter.clear();
+    if(m_historyPositionBefore.length() > 30)
+        m_historyPositionBefore.pop_front();
+}
+
+void Node::undo(){
+    if(m_historyPositionBefore.length() > 1){
+        QPoint pt = m_historyPositionBefore.last();
+        m_historyPositionBefore.pop_back();
+        m_historyPositionAfter.push_front(pt);
+        setLocalPos(m_historyPositionBefore.last());
+    }
+}
+
+void Node::redo(){
+    if(m_historyPositionAfter.length() > 0){
+        QPoint pt = m_historyPositionAfter.first();
+        qDebug() << pt;
+        m_historyPositionAfter.pop_front();
+        m_historyPositionBefore.push_back(pt);
+        setLocalPos(pt);
+    }
 }
 
 void Node::setScaleFactor(float s){
@@ -105,6 +139,16 @@ void Node::mousePressEvent(QGraphicsSceneMouseEvent *event)
     emit nodeChanged(this);
 
     QGraphicsItem::mousePressEvent(event);
+}
+
+void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    m_historyPositionBefore.push_back(getLocalPos());
+    m_historyPositionAfter.clear();
+    if(m_historyPositionBefore.length() > 30)
+        m_historyPositionBefore.pop_front();
+
+    QGraphicsItem::mouseReleaseEvent(event);
 }
 
 void Node::setSelectionState(bool f)

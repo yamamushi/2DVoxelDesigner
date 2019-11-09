@@ -17,8 +17,8 @@ class Widget : public QWidget
 public:
     explicit Widget(QWidget *parent = nullptr);
     ~Widget();
-    void setSpacingSize(int s){ qDebug() << s; m_spacingSize = s; }
-    void setSpacingUnit(int s){ qDebug() << s << "==="; m_spacingUnit = s; }
+    void setSpacingSize(int s){ m_spacingSize = s; }
+    void setSpacingUnit(int s){ m_spacingUnit = s; }
 public slots:
     void drawReactorPreview(Node* node1 = nullptr, Node* node2 = nullptr, Node* node3 = nullptr, Node* node4 = nullptr);
 protected:

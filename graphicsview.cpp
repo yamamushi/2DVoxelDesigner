@@ -224,6 +224,62 @@ void GraphicsView::onNew(int gridSize, int spacingSize){
     }
 
     drawGraphicsItems();
+    m_historiesBefore.clear();
+    m_historiesAfter.clear();
+}
+
+void GraphicsView::onResetPoint()
+{
+    /*for(int i = 0 ; i < m_nodeList.length(); i ++){
+        m_nodeList.at(i)->resetPosition();
+        m_historiesBefore.clear();
+        m_historiesAfter.clear();
+    }*/
+    if(m_selectedNode != nullptr){
+        m_selectedNode->resetPosition();
+
+        m_historiesBefore.push_back(m_selectedNode);
+        m_historiesAfter.clear();
+        if(m_historiesBefore.length() > 30)
+            m_historiesBefore.pop_front();
+    }
+}
+
+void GraphicsView::onUndo()
+{
+    if(m_historiesBefore.length() > 0){
+        Node* node = (Node*)m_historiesBefore.last();
+        if(node != nullptr){
+            m_historiesBefore.pop_back();
+            m_historiesAfter.push_front(node);
+            node->undo();
+
+            if(m_selectedNode != node)
+                if(m_selectedNode != nullptr)
+                    m_selectedNode->setSelectionState(false);
+            m_selectedNode = node;
+            node->setSelectionState(true);
+        }
+    }
+}
+
+void GraphicsView::onRedo()
+{
+    if(m_historiesAfter.length() > 0){
+        Node* node = (Node*)m_historiesAfter.first();
+        if(node != nullptr){
+            m_historiesAfter.pop_front();
+            m_historiesBefore.push_back(node);
+            node->redo();
+
+            if(m_selectedNode != node)
+                if(m_selectedNode != nullptr)
+                    m_selectedNode->setSelectionState(false);
+            m_selectedNode = node;
+            node->setSelectionState(true);
+        }
+    }
+
 }
 
 void GraphicsView::onSave(QString fn){
@@ -318,6 +374,9 @@ void GraphicsView::onOpen(QString fn){
         }
 
         file.close();
+
+        m_historiesBefore.clear();
+        m_historiesAfter.clear();
     }
 }
 
@@ -430,6 +489,15 @@ void GraphicsView::nodePressed(Node *n)
         if(m_selectedNode != nullptr)
             m_selectedNode->setSelectionState(false);
     m_selectedNode = n;
+
+    /////////Add Item to History List
+    if(n != nullptr){
+        m_historiesBefore.push_back(n);
+        m_historiesAfter.clear();
+        if(m_historiesBefore.length() > 30)
+            m_historiesBefore.pop_front();
+    }
+    /////////
 }
 
 void GraphicsView::nodeChanged(Node *n)
